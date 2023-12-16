@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class ArticleController extends Controller
      */
     public function index(): View
     {
-        return view('articles.index', ['articles' => Article::all()]);
+        return view('articles.index', ['articles' => Article::paginate(5)]);
     }
 
     /**
@@ -38,14 +39,8 @@ class ArticleController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): RedirectResponse
+    public function store(ArticleRequest $request): RedirectResponse
     {
-        $this->validate($request, [
-            'title' => 'required|min:5',
-            'short_description' => 'required',
-            'description' => 'required',
-            'image' => 'required',
-        ]);
 //        $article = (new Article)->fill([
 //            'title' => $request->title,
 //            'short_description' => $request->short_description,
@@ -86,14 +81,8 @@ class ArticleController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Article $article)
+    public function update(ArticleRequest $request, Article $article)
     {
-        $this->validate($request, [
-            'title' => 'required|min:5',
-            'short_description' => 'required',
-            'description' => 'required',
-            'image' => 'required',
-        ]);
 //
         $article->update($request->all());
 
